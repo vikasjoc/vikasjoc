@@ -1,1 +1,45 @@
+#OPEN MACBOOK TERMINAL
+#CREATE A SOURCE DIRECTORY
+#CREATE A BACKUP DIRECTORY
+MKDIR SOURCE
+MKDIR BACKUP
+
+#CREATE A BACKUP SCRIPT FILE WITH .SH EXTENTION
+TOUCH BACKUP.SH
+#NOW OPEN BACKUP.SH IN ANY LINUX EDITOR, I CHOOSE VI EDITOR
+VI BACKUP.SH
+#NOW PRESS I FOR INSERTING VALUES ON FILE
+I
+#NOW WRITE THIS SCRIPT
+SOURCE="/users/vikasjoshi/documents/linux_p"
+BACKUP="/users/vikasjoshi/documents/backup_p"
+
+RETENTION_DAYS=7
+
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+
+BACKUP_FILE="backup_$DATE.tar.gz"
+
+mkdir -p "$BACKUP"
+
+echo "Starting backup..."
+tar -czf "$BACKUP/$BACKUP_FILE" "${SOURCE[@]}"
+echo "Backup created at $BACKUP/$BACKUP_FILE"
+
+if [ "$RETENTION_DAYS" -gt 0 ]; then
+    echo "Deleting backups older than $RETENTION_DAYS days..."
+    find "$BACKUP" -type f -name "backup_*.tar.gz" -mtime +$RETENTION_DAYS -exec rm {} \;
+    echo "Old backups deleted."
+fi
+
+echo "Backup complete."
+#FOR SAVING THIS SCRIPT PRESS 
+ESC > : > WQ > RETURN
+
+#NOW MAKING THIS SCRIPT EXECUTEBLE
+CHMOD +X BACKUP.SH
+
+#RUN THE SCRIPT
+./BACKUP.SH
+
 
